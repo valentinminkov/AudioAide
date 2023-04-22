@@ -30,3 +30,5 @@ public/bundle.js.map
 # Misc
 *.DS_Store
 Thumbs.db
+
+.ignore
