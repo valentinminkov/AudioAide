@@ -1,4 +1,4 @@
-# APP NAME
+# audioaide-server
 
 A Node.js Express server that uses the Spotify API to manage user playlists, songs, and playback.
 
