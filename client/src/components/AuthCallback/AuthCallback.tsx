@@ -13,6 +13,7 @@ const AuthCallback: React.FC = () => {
       localStorage.setItem("user_id", userIdFromURL);
       navigate("/");
     }
+    // TO DO: Handle error case
   }, [navigate]);
 
   return (
