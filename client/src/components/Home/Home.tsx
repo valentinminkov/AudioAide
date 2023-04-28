@@ -2,10 +2,13 @@
 import React, { useEffect, useState } from "react";
 import { getMe } from "../../services/SpotifyService";
 import { getUserId } from "../../services/AuthService";
+import { SPOTIFY_AUTH_URL } from "../../config/config";
+import { useNavigate } from "react-router-dom";
 
 const Home: React.FC = () => {
   const [user, setUser] = useState<any>(null);
   const userId = getUserId();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -14,18 +17,24 @@ const Home: React.FC = () => {
 
         setUser(userData);
       } else {
-        window.location.href = "http://localhost:8888/api/auth/login";
+        window.location.href = SPOTIFY_AUTH_URL;
       }
     };
 
     fetchData();
   }, [userId]);
 
+  const logout = () => {
+    localStorage.removeItem("user_id");
+    navigate("/login");
+  };
+
   return (
     <div>
       {user ? (
         <div>
           <h1>Welcome, {user.display_name}</h1>
+          <button onClick={() => logout()}>Logout</button>
           {/* Render other user information here */}
         </div>
       ) : (
