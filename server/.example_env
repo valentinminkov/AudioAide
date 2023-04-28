@@ -1,0 +1,6 @@
+CLIENT_ID=<your_client_id>
+CLIENT_SECRET=<your_client_secret>
+REDIRECT_URI=<your_redirect_uri>
+CLIENT_URL=<your_client_url>
+REDIS_HOST=<your_redis_host>
+REDIS_PORT=<your_redis_port>
