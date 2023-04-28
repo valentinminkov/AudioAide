@@ -1,24 +1,12 @@
 // path: app/src/app.js
 const express = require("express");
-const session = require("express-session");
-
-const { v4: uuidv4 } = require("uuid");
-
-const sessionSecret = uuidv4();
+const cors = require("cors");
 const routes = require("./routes");
 const path = require("path");
 const app = express();
 
-process.env.SESSION_SECRET = sessionSecret;
+app.use(cors());
 
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false },
-  })
-);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
