@@ -4,7 +4,7 @@ const router = express.Router();
 const spotifyController = require("../controllers/spotifyController");
 const spotifyAccessToken = require("../middleware/spotifyAccessToken");
 
-router.get("/me", spotifyAccessToken, spotifyController.getMe);
+router.get("/user/:userId/me", spotifyAccessToken, spotifyController.getMe);
 router.get("/playlists", spotifyAccessToken, spotifyController.getPlaylists);
 router.get("/playlist/:id", spotifyAccessToken, spotifyController.getPlaylist);
 router.post(
