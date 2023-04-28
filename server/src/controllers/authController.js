@@ -2,6 +2,8 @@
 const request = require("request");
 const querystring = require("querystring");
 const crypto = require("crypto");
+const SpotifyWebApi = require("spotify-web-api-node");
+const redisClient = require("../redisClient");
 
 const { clientId, clientSecret, redirectUri } = require("../config");
 
@@ -90,19 +92,53 @@ exports.callback = (req, res) => {
       json: true,
     };
 
-    request.post(authOptions, function (error, response, body) {
+    request.post(authOptions, async function (error, response, body) {
       if (!error && response.statusCode === 200) {
         const access_token = body.access_token;
         const refresh_token = body.refresh_token;
 
-        // Save the tokens to the session
-        req.session.access_token = access_token;
-        req.session.refresh_token = refresh_token;
-
-        res.send({
-          access_token: access_token,
-          refresh_token: refresh_token,
+        // Get the user's Spotify ID
+        const spotifyApi = new SpotifyWebApi({
+          accessToken: access_token,
+          refreshToken: refresh_token,
+          clientId: clientId,
+          clientSecret: clientSecret,
         });
+
+        try {
+          const userData = await spotifyApi.getMe();
+          const userId = userData.body.id;
+          // Store the tokens in Redis
+          try {
+            await redisClient.hSet(
+              `user:${userId}`,
+              "access_token",
+              access_token
+            );
+            await redisClient.hSet(
+              `user:${userId}`,
+              "refresh_token",
+              refresh_token
+            );
+            console.log(
+              "\nTokens stored in Redis for user:",
+              `${userData.body.display_name}(${userId})\n`
+            );
+            res.redirect(
+              process.env.CLIENT_URL +
+                "/auth_callback?" +
+                querystring.stringify({
+                  user_id: userId,
+                })
+            );
+          } catch (err) {
+            console.error("Error storing tokens in Redis:", err);
+            res.send("Error storing tokens");
+          }
+        } catch (err) {
+          console.error("Error getting user data:", err);
+          res.send("Error getting user data");
+        }
       } else {
         console.error("Error occurred during token exchange:", error);
         console.log("Response status code:", response.statusCode);
