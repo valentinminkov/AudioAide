@@ -14,7 +14,7 @@ export const getMe = async (userId: string) => {
     const response = await apiClient.get(`/spotify/user/${userId}/me`);
     return response.data;
   } catch (error) {
-    console.log(error, "sum error here boss");
+    console.log(error, "Error fetching user");
   }
 };
 
