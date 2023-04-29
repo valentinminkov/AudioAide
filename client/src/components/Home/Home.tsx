@@ -1,31 +1,33 @@
 // src/Home.tsx
-import React, { useEffect, useState } from "react";
-import { getMe } from "../../services/SpotifyService";
-import { getUserId } from "../../services/AuthService";
+import React, { useEffect, useContext } from "react";
+import { getMe } from "../../api/Spotify";
 import { SPOTIFY_AUTH_URL } from "../../config/config";
 import { useNavigate } from "react-router-dom";
+import { AppContext } from "../../context/AppContext";
 
 const Home: React.FC = () => {
-  const [user, setUser] = useState<any>(null);
-  const userId = getUserId();
+  const { appState, setAppState } = useContext(AppContext) || {};
+  const { userId, user } = appState || {};
+
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       if (userId) {
         const userData = await getMe(userId);
-
-        setUser(userData);
+        if (userData) {
+          setAppState({ user: userData });
+        }
       } else {
         window.location.href = SPOTIFY_AUTH_URL;
       }
     };
 
     fetchData();
-  }, [userId]);
+  }, [setAppState, userId]);
 
   const logout = () => {
-    localStorage.removeItem("user_id");
+    setAppState({ userId: undefined });
     navigate("/login");
   };
 

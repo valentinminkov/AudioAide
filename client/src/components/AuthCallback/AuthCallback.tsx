@@ -1,8 +1,10 @@
 // src/AuthCallback.tsx
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { AppContext } from "../../context/AppContext";
 
 const AuthCallback: React.FC = () => {
+  const { setAppState } = useContext(AppContext) || {};
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -10,11 +12,11 @@ const AuthCallback: React.FC = () => {
     const userIdFromURL = urlParams.get("user_id");
 
     if (userIdFromURL) {
-      localStorage.setItem("user_id", userIdFromURL);
+      setAppState({ userId: userIdFromURL });
       navigate("/");
     }
     // TO DO: Handle error case
-  }, [navigate]);
+  }, [navigate, setAppState]);
 
   return (
     <div>

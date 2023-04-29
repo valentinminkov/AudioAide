@@ -1,21 +1,25 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Navigate } from "react-router-dom";
+import { AppContext } from "../../context/AppContext";
 
 interface AuthMiddlewareProps {
   element: React.ReactElement;
 }
 
-const isAuthenticated = () => {
-  const userId = localStorage.getItem("user_id");
+const isAuthenticated = (userId?: string) => {
   return !!userId;
 };
 
 const AuthMiddleware = ({ element }: AuthMiddlewareProps) => {
-  if (!isAuthenticated()) {
+  const { appState } = useContext(AppContext) || {};
+
+  const { userId } = appState;
+
+  if (!isAuthenticated(userId)) {
     return <Navigate to="/login" />;
   }
 
-  return element ;
+  return element;
 };
 
 export default AuthMiddleware;
