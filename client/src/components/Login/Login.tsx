@@ -1,7 +1,18 @@
-import React from "react";
+import React, { useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { SPOTIFY_AUTH_URL } from "../../config/config";
+import { AppContext } from "../../context/AppContext";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const { appState } = useContext(AppContext) || {};
+
+  useEffect(() => {
+    if (appState.user) {
+      navigate("/");
+    }
+  });
+
   return (
     <div>
       <h1>Login</h1>
