@@ -1,9 +1,11 @@
 // src/context/AppProvider.js
 import React, { useState, useEffect } from "react";
-import { AppContext, AppState, defaultState } from "./AppContext";
-
-const VERSION = "0.01";
-export const APP_STATE_KEY = `audioaide.state.${VERSION}`;
+import {
+  APP_STATE_KEY,
+  AppContext,
+  AppState,
+  defaultState,
+} from "./AppContext";
 
 interface Props {
   children: React.ReactNode;
@@ -16,7 +18,6 @@ function AppProvider({ children }: Props) {
   });
 
   useEffect(() => {
-    // Store the appState object in local storage
     localStorage.setItem(APP_STATE_KEY, JSON.stringify(state));
   }, [state]);
 
