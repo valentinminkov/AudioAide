@@ -1,21 +1,22 @@
 import React, { useContext } from "react";
 import { Navigate } from "react-router-dom";
 import { AppContext } from "../../context/AppContext";
+import { User } from "../../interfaces/Spotify";
 
 interface AuthMiddlewareProps {
   element: React.ReactElement;
 }
 
-const isAuthenticated = (userId?: string) => {
-  return !!userId;
+const isAuthenticated = (user?: User) => {
+  return !!user;
 };
 
 const AuthMiddleware = ({ element }: AuthMiddlewareProps) => {
   const { appState } = useContext(AppContext) || {};
 
-  const { userId } = appState;
+  const { user } = appState;
 
-  if (!isAuthenticated(userId)) {
+  if (!isAuthenticated(user)) {
     return <Navigate to="/login" />;
   }
 
