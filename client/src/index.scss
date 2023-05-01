@@ -1,0 +1,80 @@
+@import "./styles/fonts";
+@import "./styles/global";
+@import "./styles/colors";
+@import "./styles/mixins";
+
+// Variables
+$base-font-size: 16px;
+
+// Global styles
+html {
+  font-size: $base-font-size;
+}
+
+body {
+  margin: 0;
+  font-family: "Noto", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #333;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+// Heading styles
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Roboto", sans-serif;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0 0 1rem;
+}
+
+h1 {
+  font-size: 2rem;
+}
+
+h2 {
+  font-size: 1.75rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+}
+
+h4 {
+  font-size: 1.25rem;
+}
+
+h5 {
+  font-size: 1rem;
+}
+
+h6 {
+  font-size: 0.875rem;
+}
+
+button {
+  background-color: transparent;
+  border: 1px solid #333;
+  border-radius: 4px;
+  color: #333;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    background-color: #333;
+    color: #fff;
+  }
+}

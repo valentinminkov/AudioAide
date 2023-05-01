@@ -1,0 +1,9 @@
+.grow {
+  flex-grow: 1;
+}
+
+.link {
+  &:hover {
+    color: grey;
+  }
+}
