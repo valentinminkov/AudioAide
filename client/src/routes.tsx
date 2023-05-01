@@ -25,22 +25,42 @@ const AppRoutes = () => {
         <Route
           path="playlists"
           element={
-            <LibrarySection title="Playlists" fetchData={getPlaylists} />
+            <LibrarySection
+              title="Playlists"
+              fetchData={getPlaylists}
+              type="playlists"
+            />
           }
         />
         <Route
           path="tracks"
-          element={<LibrarySection title="Tracks" fetchData={getSavedTracks} />}
+          element={
+            <LibrarySection
+              title="Tracks"
+              fetchData={getSavedTracks}
+              type="tracks"
+            />
+          }
         />
         <Route
           path="artists"
           element={
-            <LibrarySection title="Artists" fetchData={getSavedArtists} />
+            <LibrarySection
+              title="Artists"
+              fetchData={getSavedArtists}
+              type="artists"
+            />
           }
         />
         <Route
           path="albums"
-          element={<LibrarySection title="Albums" fetchData={getSavedAlbums} />}
+          element={
+            <LibrarySection
+              title="Albums"
+              fetchData={getSavedAlbums}
+              type="albums"
+            />
+          }
         />
       </Route>
       <Route

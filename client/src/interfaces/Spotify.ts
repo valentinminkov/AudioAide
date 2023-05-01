@@ -243,6 +243,10 @@ export interface PlaylistResponse {
 }
 
 export interface FollowedArtistsResponse {
+  artists: FollowedArtistsResponseObject;
+}
+
+export interface FollowedArtistsResponseObject {
   items: Array<{
     external_urls: {
       spotify: string;
