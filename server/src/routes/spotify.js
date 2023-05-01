@@ -1,49 +1,87 @@
-// path: app/src/routes/spotify.js
 const express = require("express");
 const router = express.Router();
 const spotifyController = require("../controllers/spotifyController");
 const spotifyAccessToken = require("../middleware/spotifyAccessToken");
 
 router.get("/user/:userId/me", spotifyAccessToken, spotifyController.getMe);
-router.get("/playlists", spotifyAccessToken, spotifyController.getPlaylists);
-router.get("/playlist/:id", spotifyAccessToken, spotifyController.getPlaylist);
+router.get(
+  "/user/:userId/playlists",
+  spotifyAccessToken,
+  spotifyController.getPlaylists
+);
+router.get(
+  "/user/:userId/playlist/:id",
+  spotifyAccessToken,
+  spotifyController.getPlaylist
+);
+
+router.get(
+  "/user/:userId/savedTracks",
+  spotifyAccessToken,
+  spotifyController.getSavedTracks
+);
+
+router.get(
+  "/user/:userId/savedAlbums",
+  spotifyAccessToken,
+  spotifyController.getSavedAlbums
+);
+
+router.get(
+  "/user/:userId/savedArtists",
+  spotifyAccessToken,
+  spotifyController.getSavedArtists
+);
+
 router.post(
-  "/playlist/create",
+  "/user/:userId/playlist/create",
   spotifyAccessToken,
   spotifyController.createPlaylist
 );
 router.put(
-  "/playlist/:id",
+  "/user/:userId/playlist/:id",
   spotifyAccessToken,
   spotifyController.updatePlaylist
 );
 router.delete(
-  "/playlist/:id",
+  "/user/:userId/playlist/:id",
   spotifyAccessToken,
   spotifyController.deletePlaylist
 );
 router.get(
-  "/playlist/:id/tracks",
+  "/user/:userId/playlist/:id/tracks",
   spotifyAccessToken,
   spotifyController.getPlaylistTracks
 );
 router.post(
-  "/playlist/:id/tracks",
+  "/user/:userId/playlist/:id/tracks",
   spotifyAccessToken,
   spotifyController.addTracksToPlaylist
 );
 router.delete(
-  "/playlist/:id/tracks",
+  "/user/:userId/playlist/:id/tracks",
   spotifyAccessToken,
   spotifyController.removeTracksFromPlaylist
 );
 router.get(
-  "/currently-playing",
+  "/user/:userId/currently-playing",
   spotifyAccessToken,
   spotifyController.getCurrentlyPlaying
 );
-router.put("/pause", spotifyAccessToken, spotifyController.pausePlayback);
-router.put("/play", spotifyAccessToken, spotifyController.resumePlayback);
-router.post("/skip", spotifyAccessToken, spotifyController.skipTrack);
+router.put(
+  "/user/:userId/pause",
+  spotifyAccessToken,
+  spotifyController.pausePlayback
+);
+router.put(
+  "/user/:userId/play",
+  spotifyAccessToken,
+  spotifyController.resumePlayback
+);
+router.post(
+  "/user/:userId/skip",
+  spotifyAccessToken,
+  spotifyController.skipTrack
+);
 
 module.exports = router;

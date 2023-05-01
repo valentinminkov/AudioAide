@@ -13,7 +13,24 @@ spotifyController.getMe = async (req, res) => {
 
 spotifyController.getPlaylists = async (req, res) => {
   try {
-    const data = await req.spotifyApi.getUserPlaylists();
+    const { limit, offset } = req.query;
+    const data = await req.spotifyApi.getUserPlaylists({
+      limit: limit,
+      offset: offset,
+    });
+    res.json(data.body);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+spotifyController.getSavedArtists = async (req, res) => {
+  try {
+    const { limit, offset } = req.query;
+    const data = await req.spotifyApi.getFollowedArtists({
+      limit: limit,
+      offset: offset,
+    });
     res.json(data.body);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -119,6 +136,28 @@ spotifyController.skipTrack = async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+};
+
+spotifyController.getSavedTracks = async (req, res) => {
+  try {
+    const { limit, offset } = req.query;
+    const data = await req.spotifyApi.getMySavedTracks({
+      limit: limit,
+      offset: offset,
+    });
+    res.json(data.body);
+  } catch (error) {}
+};
+
+spotifyController.getSavedAlbums = async (req, res) => {
+  try {
+    const { limit, offset } = req.query;
+    const data = await req.spotifyApi.getMySavedAlbums({
+      limit: limit,
+      offset: offset,
+    });
+    res.json(data.body);
+  } catch (error) {}
 };
 
 module.exports = spotifyController;
