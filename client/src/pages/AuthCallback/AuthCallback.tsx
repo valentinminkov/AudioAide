@@ -1,7 +1,7 @@
 // src/AuthCallback.tsx
 import React, { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { getMe } from "../../api/Spotify";
+import { getMe } from "../../services/Spotify";
 import { SPOTIFY_AUTH_URL } from "../../config/config";
 import { AppContext } from "../../context/AppContext";
 

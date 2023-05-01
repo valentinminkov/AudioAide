@@ -1,12 +1,12 @@
 import { createContext } from "react";
-import { User } from "../interfaces/Spotify";
+import { UserResponse } from "../interfaces/Spotify";
 
 const VERSION = "0.01";
 
 export const APP_STATE_KEY = `audioaide.state.${VERSION}`;
 
 export interface AppState {
-  user?: User;
+  user?: UserResponse;
 }
 
 export const defaultState: AppState = {

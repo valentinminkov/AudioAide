@@ -59,7 +59,7 @@ async function setSpotifyAccessToken(req, res, next) {
           return;
         }
       } else {
-        console.log("Error getting user data:", err);
+        console.log("Error getting user data:", JSON.stringify(err));
         res.status(401).json({ error: "Unauthorized" });
         return;
       }
