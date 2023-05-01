@@ -1,13 +1,13 @@
 import React, { useContext } from "react";
 import { Navigate } from "react-router-dom";
 import { AppContext } from "../../context/AppContext";
-import { User } from "../../interfaces/Spotify";
+import { UserResponse } from "../../interfaces/Spotify";
 
 interface AuthMiddlewareProps {
   element: React.ReactElement;
 }
 
-const isAuthenticated = (user?: User) => {
+const isAuthenticated = (user?: UserResponse) => {
   return !!user;
 };
 
