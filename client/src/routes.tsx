@@ -6,10 +6,13 @@ import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import Discover from "./pages/Discover/Discover";
 import Library from "./pages/Library/Library";
-import Playlists from "./pages/Library/Playlists/Playlists";
-import Tracks from "./pages/Library/Tracks/Tracks";
-import Artists from "./pages/Library/Artists/Artists";
-import Albums from "./pages/Library/Albums/Albums";
+import LibrarySection from "./pages/Library/LibrarySection/LibrarySection";
+import {
+  getPlaylists,
+  getSavedArtists,
+  getSavedAlbums,
+  getSavedTracks,
+} from "./services/Spotify";
 
 const AppRoutes = () => {
   return (
@@ -19,10 +22,26 @@ const AppRoutes = () => {
       {/* Protected routes */}
       <Route path="/" element={<AuthMiddleware element={<Home />} />} />
       <Route path="/library" element={<AuthMiddleware element={<Library />} />}>
-        <Route path="playlists" element={<Playlists />} />
-        <Route path="tracks" element={<Tracks />} />
-        <Route path="artists" element={<Artists />} />
-        <Route path="albums" element={<Albums />} />
+        <Route
+          path="playlists"
+          element={
+            <LibrarySection title="Playlists" fetchData={getPlaylists} />
+          }
+        />
+        <Route
+          path="tracks"
+          element={<LibrarySection title="Tracks" fetchData={getSavedTracks} />}
+        />
+        <Route
+          path="artists"
+          element={
+            <LibrarySection title="Artists" fetchData={getSavedArtists} />
+          }
+        />
+        <Route
+          path="albums"
+          element={<LibrarySection title="Albums" fetchData={getSavedAlbums} />}
+        />
       </Route>
       <Route
         path="/discover"
