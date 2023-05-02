@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import DataDisplay from "../../../components/DataDisplay/DataDisplay";
 import { AppContext } from "../../../context/AppContext";
 import style from "./LibrarySection.module.scss";
+import Spinner from "../../../components/Spinner/Spinner";
 
 interface LibrarySectionProps {
   title: string;
@@ -21,6 +22,7 @@ const LibrarySection = ({ title, fetchData, type }: LibrarySectionProps) => {
       setData(data);
       return data;
     };
+    setData(null);
 
     if (user?.id) {
       fetchSectionData(user.id);
@@ -30,7 +32,8 @@ const LibrarySection = ({ title, fetchData, type }: LibrarySectionProps) => {
   return (
     <div className={style.containers}>
       <h3>{title}</h3>
-      {data && <DataDisplay data={data} type={type} />}
+
+      {data ? <DataDisplay data={data} type={type} /> : <Spinner />}
     </div>
   );
 };

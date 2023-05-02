@@ -17,10 +17,6 @@ interface DataDisplayProps {
 
 const DataDisplay: React.FC<DataDisplayProps> = ({ data, type }) => {
   const renderData = () => {
-    if (!data) {
-      return <p>Loading...</p>;
-    }
-
     let items;
 
     switch (type) {
