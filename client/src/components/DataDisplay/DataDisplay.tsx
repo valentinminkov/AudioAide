@@ -5,6 +5,9 @@ import {
   AlbumsResponse,
   SavedTracksResponse,
 } from "../../interfaces/Spotify";
+import Data from "../Data/Data";
+
+type DataType = "artists" | "playlists" | "albums" | "tracks";
 
 interface DataDisplayProps {
   data:
@@ -12,90 +15,65 @@ interface DataDisplayProps {
     | PlaylistResponse
     | AlbumsResponse
     | SavedTracksResponse;
-  type: "artists" | "playlists" | "albums" | "tracks";
+  type: DataType;
 }
 
+interface ItemProperties {
+  id: string;
+  name: string;
+  images: any[];
+}
+
+const getItemProperties = (item: any, type: DataType): ItemProperties => {
+  switch (type) {
+    case "artists":
+    case "playlists":
+      return { id: item?.id, name: item?.name, images: item?.images };
+    case "albums":
+      return {
+        id: item?.album?.id,
+        name: item?.album?.name,
+        images: item?.album?.images,
+      };
+    case "tracks":
+      return {
+        id: item?.track?.id,
+        name: item?.track?.name,
+        images: item?.track?.album?.images,
+      };
+    default:
+      throw new Error(`Invalid type: ${type}`);
+  }
+};
+
 const DataDisplay: React.FC<DataDisplayProps> = ({ data, type }) => {
-  const renderData = () => {
-    let items;
+  let items;
 
-    switch (type) {
-      case "artists":
-        items = (data as FollowedArtistsResponse)?.artists?.items;
-        return items?.map((artist) => {
-          if (artist.images && artist.images[0]) {
-            return (
-              <div key={artist.id}>
-                <h4>{artist.name}</h4>
-                <img src={artist.images[0]?.url} alt={artist.name} />
-              </div>
-            );
-          } else {
-            return (
-              <div key={artist.id}>
-                <h4>{artist.name}</h4>
-                <p>No image available</p>
-              </div>
-            );
-          }
-        });
-      case "playlists":
-        items = (data as PlaylistResponse).items;
-        return items?.map((playlist) => {
-          if (playlist.images && playlist.images[0]) {
-            return (
-              <div key={playlist.id}>
-                <h4>{playlist.name}</h4>
-                <img src={playlist.images[0]?.url} alt={playlist.name} />
-              </div>
-            );
-          } else {
-            return (
-              <div key={playlist.id}>
-                <h4>{playlist.name}</h4>
-                <p>No image available</p>
-              </div>
-            );
-          }
-        });
+  switch (type) {
+    case "artists":
+      items = (data as FollowedArtistsResponse)?.artists?.items;
+      break;
+    case "playlists":
+      items = (data as PlaylistResponse).items;
+      break;
+    case "albums":
+      items = (data as AlbumsResponse).items;
+      break;
+    case "tracks":
+      items = (data as SavedTracksResponse).items;
+      break;
+    default:
+      throw new Error(`Invalid type: ${type}`);
+  }
 
-      case "albums":
-        items = (data as AlbumsResponse).items;
-        return items?.map(({ album }) => {
-          if (album) {
-            return (
-              <div key={album.id}>
-                <h4>{album.name}</h4>
-                <img src={album.images[0]?.url} alt={album.name} />
-              </div>
-            );
-          } else {
-            return null;
-          }
-        });
-
-      case "tracks":
-        items = (data as SavedTracksResponse).items;
-        return items?.map((item) => {
-          if (item.track) {
-            const { id, name, album } = item.track;
-            return (
-              <div key={id}>
-                <h4>{name}</h4>
-                <img src={album.images[0]?.url} alt={name} />
-              </div>
-            );
-          } else {
-            return null;
-          }
-        });
-
-      default:
-        return null;
-    }
-  };
-
-  return <div>{renderData()}</div>;
+  return (
+    <div>
+      {items?.map((item) => {
+        const { id, name, images } = getItemProperties(item, type);
+        return <Data key={id} title={name} images={images} />;
+      })}
+    </div>
+  );
 };
 
 export default DataDisplay;

@@ -246,6 +246,12 @@ export interface FollowedArtistsResponse {
   artists: FollowedArtistsResponseObject;
 }
 
+export interface Image {
+  height: number;
+  url: string;
+  width: number;
+}
+
 export interface FollowedArtistsResponseObject {
   items: Array<{
     external_urls: {
@@ -258,11 +264,7 @@ export interface FollowedArtistsResponseObject {
     genres: string[];
     href: string;
     id: string;
-    images: Array<{
-      height: number;
-      url: string;
-      width: number;
-    }>;
+    images: Image[];
     name: string;
     popularity: number;
     type: string;
