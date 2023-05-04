@@ -1,3 +1,8 @@
+.container {
+  min-height: calc(100vh - 58px); 
+  margin-bottom: 68px; /* This should be at least the height of the footer */
+}
+
 .navContainer {
   padding: 1rem 2rem;
   display: flex;

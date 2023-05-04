@@ -13,7 +13,7 @@ const Layout = ({ children }: Props) => {
   const { appState } = useContext(AppContext);
   const { user } = appState;
   return (
-    <div>
+    <div className={styles.container}>
       {/* Navigation */}
       {user && (
         <div className={styles.navContainer}>
