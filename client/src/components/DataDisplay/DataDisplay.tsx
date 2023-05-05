@@ -7,6 +7,7 @@ import {
 } from "../../interfaces/Spotify";
 import Data from "../Data/Data";
 import Pagination from "../Pagination/Pagination";
+import StickyContainer from "../StickyContainer/StickyContainer";
 import styles from "./DataDisplay.module.scss";
 import { useNavigate, useLocation } from "react-router-dom";
 
@@ -106,18 +107,19 @@ const DataDisplay: React.FC<DataDisplayProps> = ({
 
   return (
     <div>
+      <StickyContainer>
+        <Pagination
+          totalPages={totalPages}
+          currentPage={currentPage}
+          onPageChange={(page) => handlePageChange(page)}
+        />
+      </StickyContainer>
       <div className={styles.content}>
         {items?.map((item) => {
           const { id, name, images } = getItemProps(item);
           return <Data key={id} title={name} images={images} />;
         })}
       </div>
-
-      <Pagination
-        totalPages={totalPages}
-        currentPage={currentPage}
-        onPageChange={(page) => handlePageChange(page)}
-      />
     </div>
   );
 };

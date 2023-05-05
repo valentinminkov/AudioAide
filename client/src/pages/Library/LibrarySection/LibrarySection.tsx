@@ -25,7 +25,7 @@ interface LibrarySectionProps {
   type: DataType;
 }
 
-const itemsPerPage = 12;
+const itemsPerPage = 25;
 const LibrarySection = ({ title, fetchData, type }: LibrarySectionProps) => {
   const { appState } = useContext(AppContext) || {};
   const { user } = appState || {};
