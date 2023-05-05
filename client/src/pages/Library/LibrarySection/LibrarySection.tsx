@@ -25,6 +25,7 @@ interface LibrarySectionProps {
   type: DataType;
 }
 
+const itemsPerPage = 12;
 const LibrarySection = ({ title, fetchData, type }: LibrarySectionProps) => {
   const { appState } = useContext(AppContext) || {};
   const { user } = appState || {};
@@ -35,13 +36,9 @@ const LibrarySection = ({ title, fetchData, type }: LibrarySectionProps) => {
     [location.search]
   );
 
-  const pageFromUrl = queryParams.get("page")
-    ? parseInt(queryParams.get("page")!, 10)
-    : 1;
+  const pageFromUrl = parseInt(queryParams.get("page")!, 10) || 1;
 
   const [page, setPage] = useState(pageFromUrl);
-
-  // State
   const [data, setData] = useState<
     | FollowedArtistsResponse
     | PlaylistResponse
@@ -49,22 +46,26 @@ const LibrarySection = ({ title, fetchData, type }: LibrarySectionProps) => {
     | SavedTracksResponse
     | null
   >(null);
-  const [itemsPerPage, setItemsPerPage] = useState(12);
   const [offset, setOffset] = useState((page - 1) * itemsPerPage);
+
+  const fetchDataMemoized = useCallback(fetchData, [fetchData]);
+  const setDataMemoized = useCallback(setData, [setData]);
 
   const fetchSectionData = useCallback(
     async (userId: string, limit = itemsPerPage, offset = 0) => {
-      return await fetchData(userId, limit, offset);
+      return await fetchDataMemoized(userId, limit, offset);
     },
-    [fetchData, itemsPerPage]
+    [fetchDataMemoized]
   );
 
   const setAsyncSectionData = useCallback(
     async (userId: string, offset: number) => {
+      setDataMemoized(null); // Reset data to null to show spinner
+
       const fetchedData = await fetchSectionData(userId, itemsPerPage, offset);
-      setData(fetchedData);
+      setDataMemoized(fetchedData);
     },
-    [fetchSectionData, itemsPerPage]
+    [fetchSectionData, setDataMemoized]
   );
 
   useEffect(() => {
@@ -72,9 +73,8 @@ const LibrarySection = ({ title, fetchData, type }: LibrarySectionProps) => {
   }, [pageFromUrl]);
 
   useEffect(() => {
-    const newOffset = (page - 1) * itemsPerPage;
-    setOffset(newOffset);
-  }, [page, itemsPerPage]);
+    setOffset((page - 1) * itemsPerPage);
+  }, [page]);
 
   useEffect(() => {
     if (!queryParams.get("page")) {
@@ -82,40 +82,24 @@ const LibrarySection = ({ title, fetchData, type }: LibrarySectionProps) => {
     }
   }, [navigate, location.pathname, queryParams]);
 
-  // TO DO
-  // Accessing the different objects could be done differently with less repeaiting code
   useEffect(() => {
     if (data) {
-      let maxPage;
-      switch (type) {
-        case "artists":
-          maxPage = Math.ceil(
-            (data as FollowedArtistsResponse).artists?.total / itemsPerPage
-          );
-          break;
-        case "playlists":
-          maxPage = Math.ceil((data as PlaylistResponse)?.total / itemsPerPage);
-          break;
-        case "albums":
-          maxPage = Math.ceil((data as AlbumsResponse)?.total / itemsPerPage);
-          break;
-        case "tracks":
-          maxPage = Math.ceil(
-            (data as SavedTracksResponse)?.total / itemsPerPage
-          );
-          break;
-        default:
-          maxPage = 1;
-      }
+      const maxPage = {
+        artists: Math.ceil(
+          (data as FollowedArtistsResponse).artists?.total / itemsPerPage
+        ),
+        playlists: Math.ceil((data as PlaylistResponse)?.total / itemsPerPage),
+        albums: Math.ceil((data as AlbumsResponse)?.total / itemsPerPage),
+        tracks: Math.ceil((data as SavedTracksResponse)?.total / itemsPerPage),
+      }[type];
+
       if (page > maxPage) {
         navigate(`${location.pathname}?page=${maxPage}`, { replace: true });
       }
     }
-  }, [navigate, location.pathname, data, itemsPerPage, page, type]);
+  }, [navigate, location.pathname, data, page, type]);
 
   useEffect(() => {
-    setData(null);
-
     if (user?.id) {
       setAsyncSectionData(user.id, offset);
     }
