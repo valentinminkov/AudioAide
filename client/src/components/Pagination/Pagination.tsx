@@ -16,11 +16,11 @@ const Pagination: React.FC<PaginationProps> = ({
   const pages = Array.from(Array(totalPages).keys()).map((i) => i + 1);
 
   return (
-    <div className={styles.pagination}>
+    <div className={styles.container}>
       {pages.map((page) => (
         <button
           key={page}
-          className={`${styles.page} ${
+          className={`${styles.btn} ${
             page === currentPage ? styles.active : ""
           }`}
           onClick={() => onPageChange(page)}

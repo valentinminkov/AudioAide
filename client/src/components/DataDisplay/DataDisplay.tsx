@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
   FollowedArtistsResponse,
   PlaylistResponse,
@@ -6,6 +6,9 @@ import {
   SavedTracksResponse,
 } from "../../interfaces/Spotify";
 import Data from "../Data/Data";
+import Pagination from "../Pagination/Pagination";
+import styles from "./DataDisplay.module.scss";
+import { useNavigate, useLocation } from "react-router-dom";
 
 type DataType = "artists" | "playlists" | "albums" | "tracks";
 
@@ -16,15 +19,13 @@ interface DataDisplayProps {
     | AlbumsResponse
     | SavedTracksResponse;
   type: DataType;
+  offset: number;
+  setOffset: React.Dispatch<React.SetStateAction<number>>;
+  itemsPerPage: number;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
-interface ItemProperties {
-  id: string;
-  name: string;
-  images: any[];
-}
-
-const getItemProperties = (item: any, type: DataType): ItemProperties => {
+const getItemProperties = (item: any, type: DataType) => {
   switch (type) {
     case "artists":
     case "playlists":
@@ -41,37 +42,73 @@ const getItemProperties = (item: any, type: DataType): ItemProperties => {
         name: item?.track?.name,
         images: item?.track?.album?.images,
       };
-    default:
-      throw new Error(`Invalid type: ${type}`);
   }
 };
 
-const DataDisplay: React.FC<DataDisplayProps> = ({ data, type }) => {
-  let items;
+const DataDisplay: React.FC<DataDisplayProps> = ({
+  data,
+  type,
+  offset,
+  setOffset,
+  itemsPerPage,
+  setPage,
+}) => {
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  switch (type) {
-    case "artists":
-      items = (data as FollowedArtistsResponse)?.artists?.items;
-      break;
-    case "playlists":
-      items = (data as PlaylistResponse).items;
-      break;
-    case "albums":
-      items = (data as AlbumsResponse).items;
-      break;
-    case "tracks":
-      items = (data as SavedTracksResponse).items;
-      break;
-    default:
-      throw new Error(`Invalid type: ${type}`);
-  }
+  const { items, total } = useMemo(() => {
+    switch (type) {
+      case "artists":
+        return {
+          items: (data as FollowedArtistsResponse).artists.items,
+          total: (data as FollowedArtistsResponse).artists.total,
+        };
+      case "playlists":
+        return {
+          items: (data as PlaylistResponse).items,
+          total: (data as PlaylistResponse).total,
+        };
+      case "albums":
+        return {
+          items: (data as AlbumsResponse).items,
+          total: (data as AlbumsResponse).total,
+        };
+      case "tracks":
+        return {
+          items: (data as SavedTracksResponse).items,
+          total: (data as SavedTracksResponse).total,
+        };
+      default:
+        throw new Error(`Invalid type: ${type}`);
+    }
+  }, [data, type]);
+
+  const totalPages = Math.ceil(total / itemsPerPage);
+  const currentPage = Math.floor(offset / itemsPerPage) + 1;
+
+  const handlePageChange = (page: number) => {
+    if (page !== currentPage) {
+      const newOffset = (page - 1) * itemsPerPage;
+      setOffset(newOffset);
+      setPage(page);
+      navigate(`${location.pathname}?page=${page}`, { replace: true });
+    }
+  };
 
   return (
     <div>
-      {items?.map((item) => {
-        const { id, name, images } = getItemProperties(item, type);
-        return <Data key={id} title={name} images={images} />;
-      })}
+      <div className={styles.content}>
+        {items?.map((item) => {
+          const { id, name, images } = getItemProperties(item, type);
+          return <Data key={id} title={name} images={images} />;
+        })}
+      </div>
+
+      <Pagination
+        totalPages={totalPages}
+        currentPage={currentPage}
+        onPageChange={(page) => handlePageChange(page)}
+      />
     </div>
   );
 };
