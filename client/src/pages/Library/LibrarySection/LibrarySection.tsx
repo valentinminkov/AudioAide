@@ -90,18 +90,18 @@ const LibrarySection = ({ title, fetchData, type }: LibrarySectionProps) => {
       switch (type) {
         case "artists":
           maxPage = Math.ceil(
-            (data as FollowedArtistsResponse).artists.total / itemsPerPage
+            (data as FollowedArtistsResponse).artists?.total / itemsPerPage
           );
           break;
         case "playlists":
-          maxPage = Math.ceil((data as PlaylistResponse).total / itemsPerPage);
+          maxPage = Math.ceil((data as PlaylistResponse)?.total / itemsPerPage);
           break;
         case "albums":
-          maxPage = Math.ceil((data as AlbumsResponse).total / itemsPerPage);
+          maxPage = Math.ceil((data as AlbumsResponse)?.total / itemsPerPage);
           break;
         case "tracks":
           maxPage = Math.ceil(
-            (data as SavedTracksResponse).total / itemsPerPage
+            (data as SavedTracksResponse)?.total / itemsPerPage
           );
           break;
         default:

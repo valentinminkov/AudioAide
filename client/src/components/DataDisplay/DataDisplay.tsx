@@ -56,27 +56,27 @@ const DataDisplay: React.FC<DataDisplayProps> = ({
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { items, total } = useMemo(() => {
+  const { items = [], total = 0 } = useMemo(() => {
     switch (type) {
       case "artists":
         return {
-          items: (data as FollowedArtistsResponse).artists.items,
-          total: (data as FollowedArtistsResponse).artists.total,
+          items: (data as FollowedArtistsResponse).artists?.items,
+          total: (data as FollowedArtistsResponse).artists?.total,
         };
       case "playlists":
         return {
-          items: (data as PlaylistResponse).items,
-          total: (data as PlaylistResponse).total,
+          items: (data as PlaylistResponse)?.items,
+          total: (data as PlaylistResponse)?.total,
         };
       case "albums":
         return {
-          items: (data as AlbumsResponse).items,
-          total: (data as AlbumsResponse).total,
+          items: (data as AlbumsResponse)?.items,
+          total: (data as AlbumsResponse)?.total,
         };
       case "tracks":
         return {
-          items: (data as SavedTracksResponse).items,
-          total: (data as SavedTracksResponse).total,
+          items: (data as SavedTracksResponse)?.items,
+          total: (data as SavedTracksResponse)?.total,
         };
       default:
         throw new Error(`Invalid type: ${type}`);
