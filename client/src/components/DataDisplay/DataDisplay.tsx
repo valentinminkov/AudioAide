@@ -25,25 +25,29 @@ interface DataDisplayProps {
   setPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const getItemProperties = (item: any, type: DataType) => {
-  switch (type) {
-    case "artists":
-    case "playlists":
-      return { id: item?.id, name: item?.name, images: item?.images };
-    case "albums":
-      return {
-        id: item?.album?.id,
-        name: item?.album?.name,
-        images: item?.album?.images,
-      };
-    case "tracks":
-      return {
-        id: item?.track?.id,
-        name: item?.track?.name,
-        images: item?.track?.album?.images,
-      };
-  }
-};
+const getItemProperties = (item: any, type: DataType) =>
+  ({
+    artists: {
+      id: item?.id,
+      name: item?.name,
+      images: item?.images,
+    },
+    playlists: {
+      id: item?.id,
+      name: item?.name,
+      images: item?.images,
+    },
+    albums: {
+      id: item?.album?.id,
+      name: item?.album?.name,
+      images: item?.album?.images,
+    },
+    tracks: {
+      id: item?.track?.id,
+      name: item?.track?.name,
+      images: item?.track?.album?.images,
+    },
+  }[type]);
 
 const DataDisplay: React.FC<DataDisplayProps> = ({
   data,
@@ -95,11 +99,16 @@ const DataDisplay: React.FC<DataDisplayProps> = ({
     }
   };
 
+  const getItemProps = useMemo(
+    () => (item: any) => getItemProperties(item, type),
+    [type]
+  );
+
   return (
     <div>
       <div className={styles.content}>
         {items?.map((item) => {
-          const { id, name, images } = getItemProperties(item, type);
+          const { id, name, images } = getItemProps(item);
           return <Data key={id} title={name} images={images} />;
         })}
       </div>
