@@ -2,14 +2,16 @@ import { Image } from "../../interfaces/Spotify";
 import styles from "./Data.module.scss";
 
 interface Props {
+  id: string;
   title: string;
   images: Image[];
+  onClick: (id: string) => void;
 }
 
-const Data = ({ title, images }: Props) => {
+const Data = ({ id, title, images, onClick }: Props) => {
   const imageUrl = images?.length > 0 ? images[0]?.url : null;
   return (
-    <div className={styles.container}>
+    <div className={styles.container} onClick={() => onClick(id)}>
       {imageUrl ? (
         <img src={imageUrl} alt={title} className={styles.img} />
       ) : (

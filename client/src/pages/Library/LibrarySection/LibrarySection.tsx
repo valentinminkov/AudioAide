@@ -10,6 +10,7 @@ import DataDisplay from "../../../components/DataDisplay/DataDisplay";
 import { AppContext } from "../../../context/AppContext";
 import style from "./LibrarySection.module.scss";
 import Spinner from "../../../components/Spinner/Spinner";
+import useMappedData from "../../../hooks/useMappedData";
 import {
   AlbumsResponse,
   FollowedArtistsResponse,
@@ -26,19 +27,17 @@ interface LibrarySectionProps {
 }
 
 const itemsPerPage = 25;
+
 const LibrarySection = ({ title, fetchData, type }: LibrarySectionProps) => {
-  const { appState } = useContext(AppContext) || {};
-  const { user } = appState || {};
+  const { appState: { user } = { user: undefined } } =
+    useContext(AppContext) || {};
   const location = useLocation();
   const navigate = useNavigate();
   const queryParams = useMemo(
     () => new URLSearchParams(location.search),
     [location.search]
   );
-
   const pageFromUrl = parseInt(queryParams.get("page")!, 10) || 1;
-
-  const [page, setPage] = useState(pageFromUrl);
   const [data, setData] = useState<
     | FollowedArtistsResponse
     | PlaylistResponse
@@ -46,64 +45,68 @@ const LibrarySection = ({ title, fetchData, type }: LibrarySectionProps) => {
     | SavedTracksResponse
     | null
   >(null);
-  const [offset, setOffset] = useState((page - 1) * itemsPerPage);
+  const { items, total } = useMappedData(data, type);
+  const offset = (pageFromUrl - 1) * itemsPerPage;
 
-  const fetchDataMemoized = useCallback(fetchData, [fetchData]);
-  const setDataMemoized = useCallback(setData, [setData]);
-
-  const fetchSectionData = useCallback(
+  const fetchDataWrapper = useCallback(
     async (userId: string, limit = itemsPerPage, offset = 0) => {
-      return await fetchDataMemoized(userId, limit, offset);
+      // TO DO: Cache data to optimize, instead of just fetching it every time
+      setData(null);
+      const fetchedData = await fetchData(userId, limit, offset);
+      setData(fetchedData);
     },
-    [fetchDataMemoized]
+    [fetchData]
   );
-
-  const setAsyncSectionData = useCallback(
-    async (userId: string, offset: number) => {
-      setDataMemoized(null); // Reset data to null to show spinner
-
-      const fetchedData = await fetchSectionData(userId, itemsPerPage, offset);
-      setDataMemoized(fetchedData);
-    },
-    [fetchSectionData, setDataMemoized]
-  );
-
-  useEffect(() => {
-    setPage(pageFromUrl);
-  }, [pageFromUrl]);
-
-  useEffect(() => {
-    setOffset((page - 1) * itemsPerPage);
-  }, [page]);
-
-  useEffect(() => {
-    if (!queryParams.get("page")) {
-      navigate(`${location.pathname}?page=1`, { replace: true });
-    }
-  }, [navigate, location.pathname, queryParams]);
-
-  useEffect(() => {
-    if (data) {
-      const maxPage = {
-        artists: Math.ceil(
-          (data as FollowedArtistsResponse).artists?.total / itemsPerPage
-        ),
-        playlists: Math.ceil((data as PlaylistResponse)?.total / itemsPerPage),
-        albums: Math.ceil((data as AlbumsResponse)?.total / itemsPerPage),
-        tracks: Math.ceil((data as SavedTracksResponse)?.total / itemsPerPage),
-      }[type];
-
-      if (page > maxPage) {
-        navigate(`${location.pathname}?page=${maxPage}`, { replace: true });
-      }
-    }
-  }, [navigate, location.pathname, data, page, type]);
 
   useEffect(() => {
     if (user?.id) {
-      setAsyncSectionData(user.id, offset);
+      // Only fetch data if the page from the URL is valid and non-negative
+      if (pageFromUrl > 0) {
+        const offset = (pageFromUrl - 1) * itemsPerPage;
+        fetchDataWrapper(user.id, itemsPerPage, offset);
+      }
     }
-  }, [setAsyncSectionData, user, offset]);
+  }, [fetchDataWrapper, user, pageFromUrl]);
+
+  useEffect(() => {
+    // If the page is not specified in the URL, set it to 1
+    if (!queryParams.get("page")) {
+      navigate(`${location.pathname}?page=1`, { replace: true });
+    }
+
+    if (data) {
+      const maxPage = Math.ceil(total / itemsPerPage);
+      if (pageFromUrl > maxPage) {
+        // If the page from the URL is greater than the max page, set it to the max page
+        navigate(`${location.pathname}?page=${maxPage}`, { replace: true });
+      }
+    }
+  }, [navigate, location.pathname, data, total, queryParams, pageFromUrl]);
+
+  const handlePageChange = (page: number) => {
+    if (page !== pageFromUrl) {
+      navigate(`${location.pathname}?page=${page}`, { replace: true });
+    }
+  };
+
+  const onContainerClick = (id: string) => {
+    switch (type) {
+      case "artists":
+        console.log(type, id);
+        break;
+      case "playlists":
+        console.log(type, id);
+        break;
+      case "albums":
+        console.log(type, id);
+        break;
+      case "tracks":
+        console.log(type, id);
+        break;
+      default:
+        throw new Error(`Invalid type: ${type}`);
+    }
+  };
 
   return (
     <div className={style.containers}>
@@ -111,12 +114,14 @@ const LibrarySection = ({ title, fetchData, type }: LibrarySectionProps) => {
 
       {data ? (
         <DataDisplay
-          data={data}
+          currentPage={pageFromUrl}
+          items={items}
+          total={total}
           type={type}
           offset={offset}
-          setOffset={setOffset}
           itemsPerPage={itemsPerPage}
-          setPage={setPage}
+          handlePageChange={handlePageChange}
+          onContainerClick={onContainerClick}
         />
       ) : (
         <Spinner />
