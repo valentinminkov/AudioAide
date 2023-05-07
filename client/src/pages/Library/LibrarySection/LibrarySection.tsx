@@ -14,7 +14,7 @@ import useMappedData from "../../../hooks/useMappedData";
 import {
   AlbumsResponse,
   FollowedArtistsResponse,
-  PlaylistResponse,
+  PlaylistsResponse,
   SavedTracksResponse,
 } from "../../../interfaces/Spotify";
 
@@ -40,7 +40,7 @@ const LibrarySection = ({ title, fetchData, type }: LibrarySectionProps) => {
   const pageFromUrl = parseInt(queryParams.get("page")!, 10) || 1;
   const [data, setData] = useState<
     | FollowedArtistsResponse
-    | PlaylistResponse
+    | PlaylistsResponse
     | AlbumsResponse
     | SavedTracksResponse
     | null
@@ -95,6 +95,10 @@ const LibrarySection = ({ title, fetchData, type }: LibrarySectionProps) => {
         console.log(type, id);
         break;
       case "playlists":
+        navigate(`/library/playlist/${id}`, {
+          replace: true,
+        });
+
         console.log(type, id);
         break;
       case "albums":

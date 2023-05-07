@@ -5,6 +5,7 @@ import {
   SavedTracksResponse,
   FollowedArtistsResponse,
   UserResponse,
+  PlaylistsResponse,
   PlaylistResponse,
 } from "../interfaces/Spotify";
 
@@ -32,6 +33,28 @@ export const getPlaylists = async (userId: string, limit = 20, offset = 0) => {
         offset: offset,
       },
     });
+    return response.data as PlaylistsResponse;
+  } catch (error) {
+    console.log(error, "Error fetching playlists");
+  }
+};
+
+export const getPlaylist = async (
+  playlistId: string,
+  userId: string,
+  limit = 20,
+  offset = 0
+) => {
+  try {
+    const response = await apiClient.get(
+      `spotify/user/${userId}/playlist/${playlistId}`,
+      {
+        params: {
+          limit: limit,
+          offset: offset,
+        },
+      }
+    );
     return response.data as PlaylistResponse;
   } catch (error) {
     console.log(error, "Error fetching playlists");
