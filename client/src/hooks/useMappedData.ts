@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import {
   FollowedArtistsResponse,
-  PlaylistResponse,
+  PlaylistsResponse,
   AlbumsResponse,
   SavedTracksResponse,
 } from "../interfaces/Spotify";
@@ -12,7 +12,7 @@ type DataType = "artists" | "playlists" | "albums" | "tracks";
 const useMappedData = (
   data:
     | FollowedArtistsResponse
-    | PlaylistResponse
+    | PlaylistsResponse
     | AlbumsResponse
     | SavedTracksResponse
     | null,
@@ -33,7 +33,7 @@ const useMappedData = (
           total: artistsData?.artists?.total || 0,
         };
       case "playlists":
-        const playlistsData = data as PlaylistResponse;
+        const playlistsData = data as PlaylistsResponse;
         return {
           items:
             playlistsData?.items?.map((item) => ({
