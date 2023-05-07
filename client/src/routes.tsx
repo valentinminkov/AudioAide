@@ -7,6 +7,7 @@ import Login from "./pages/Login/Login";
 import Discover from "./pages/Discover/Discover";
 import Library from "./pages/Library/Library";
 import LibrarySection from "./pages/Library/LibrarySection/LibrarySection";
+import Playlist from "./pages/Library/Playlist/Playlist";
 import {
   getPlaylists,
   getSavedArtists,
@@ -29,6 +30,13 @@ const AppRoutes = () => {
               title="Playlists"
               fetchData={getPlaylists}
               type="playlists"
+            />
+          }
+        />
+        <Route
+          path="playlist/:id"
+          element={
+            <Playlist
             />
           }
         />
