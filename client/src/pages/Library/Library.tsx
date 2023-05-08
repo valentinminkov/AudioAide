@@ -1,8 +1,19 @@
-import React from "react";
-import { Link, Outlet } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, Outlet, useNavigate, useLocation } from "react-router-dom";
 import styles from "./Library.module.scss";
 
 const Library = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  console.log(location.pathname, "location.pathname");
+
+  useEffect(() => {
+    if (location.pathname === "/library") {
+      navigate("/library/playlists", { replace: true });
+    }
+  }, [location.pathname, navigate]);
+
   return (
     <div>
       <h1>Library</h1>
