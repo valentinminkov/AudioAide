@@ -1,0 +1,43 @@
+.container {
+  ol {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    width: 100%;
+  }
+
+  li {
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.2rem 0;
+
+    &:first-of-type {
+      border-top: none;
+    }
+
+    &:last-of-type {
+      border-bottom: none;
+    }
+
+    &:hover {
+      background-color: #f3f3f3;
+    }
+
+    span {
+      flex: 1;
+    }
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    padding: 0.5rem 0;
+    margin-bottom: 0.5rem;
+  }
+}
