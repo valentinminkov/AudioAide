@@ -28,6 +28,7 @@
     }
 
     span {
+      padding: 0.5rem 0;
       flex: 1;
     }
   }
@@ -39,5 +40,9 @@
     font-weight: bold;
     padding: 0.5rem 0;
     margin-bottom: 0.5rem;
+
+    span {
+      flex: 1;
+    }
   }
 }

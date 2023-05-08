@@ -30,7 +30,7 @@ const Playlist: React.FC<Props> = ({}) => {
     getPlaylistData();
   }, [id, user]);
 
-  const columnHeaders = ["Title", "Artist", "huehuehuehu"];
+  const columnHeaders = ["Title", "Artist", ""];
   const listColumns = playlist?.tracks.items.map((item) => [
     item.track.name,
     item.track.artists.map((artist) => artist.name).join(", "),
