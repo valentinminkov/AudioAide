@@ -8,7 +8,7 @@ import React, {
 import { useLocation, useNavigate } from "react-router-dom";
 import DataDisplay from "../../../components/DataDisplay/DataDisplay";
 import { AppContext } from "../../../context/AppContext";
-import style from "./LibrarySection.module.scss";
+import style from "./Overview.module.scss";
 import Spinner from "../../../components/Spinner/Spinner";
 import useMappedData from "../../../hooks/useMappedData";
 import {
@@ -95,7 +95,7 @@ const Overview = ({ title, fetchData, type }: Props) => {
         console.log(type, id);
         break;
       case "playlists":
-        navigate(`/library/playlist/${id}`, {
+        navigate(`/library/item/${id}`, {
           replace: true,
         });
 

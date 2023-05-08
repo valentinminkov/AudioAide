@@ -7,7 +7,7 @@ import Login from "./pages/Login/Login";
 import Discover from "./pages/Discover/Discover";
 import Library from "./pages/Library/Library";
 import Overview from "./pages/Library/Overview/Overview";
-import Playlist from "./pages/Library/Playlist/Playlist";
+import ItemView from "./pages/Library/ItemView/ItemView";
 import {
   getPlaylists,
   getSavedArtists,
@@ -33,21 +33,11 @@ const AppRoutes = () => {
             />
           }
         />
-        <Route
-          path="playlist/:id"
-          element={
-            <Playlist
-            />
-          }
-        />
+        <Route path="item/:id" element={<ItemView />} />
         <Route
           path="tracks"
           element={
-            <Overview
-              title="Tracks"
-              fetchData={getSavedTracks}
-              type="tracks"
-            />
+            <Overview title="Tracks" fetchData={getSavedTracks} type="tracks" />
           }
         />
         <Route
@@ -63,11 +53,7 @@ const AppRoutes = () => {
         <Route
           path="albums"
           element={
-            <Overview
-              title="Albums"
-              fetchData={getSavedAlbums}
-              type="albums"
-            />
+            <Overview title="Albums" fetchData={getSavedAlbums} type="albums" />
           }
         />
       </Route>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
-import style from "./Playlist.module.scss";
+import style from "./ItemView.module.scss";
 import { getPlaylist } from "../../../services/Spotify";
 import { PlaylistResponse } from "../../../interfaces/Spotify";
 import { AppContext } from "../../../context/AppContext";
