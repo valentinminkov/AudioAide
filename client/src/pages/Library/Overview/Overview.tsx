@@ -20,7 +20,7 @@ import {
 
 type DataType = "artists" | "playlists" | "albums" | "tracks";
 
-interface LibrarySectionProps {
+interface Props {
   title: string;
   fetchData: (userId: string, limit: number, offset: number) => Promise<any>;
   type: DataType;
@@ -28,7 +28,7 @@ interface LibrarySectionProps {
 
 const itemsPerPage = 24;
 
-const LibrarySection = ({ title, fetchData, type }: LibrarySectionProps) => {
+const Overview = ({ title, fetchData, type }: Props) => {
   const { appState: { user } = { user: undefined } } =
     useContext(AppContext) || {};
   const location = useLocation();
@@ -134,4 +134,4 @@ const LibrarySection = ({ title, fetchData, type }: LibrarySectionProps) => {
   );
 };
 
-export default LibrarySection;
+export default Overview;

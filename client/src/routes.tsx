@@ -6,7 +6,7 @@ import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import Discover from "./pages/Discover/Discover";
 import Library from "./pages/Library/Library";
-import LibrarySection from "./pages/Library/LibrarySection/LibrarySection";
+import Overview from "./pages/Library/Overview/Overview";
 import Playlist from "./pages/Library/Playlist/Playlist";
 import {
   getPlaylists,
@@ -26,7 +26,7 @@ const AppRoutes = () => {
         <Route
           path="playlists"
           element={
-            <LibrarySection
+            <Overview
               title="Playlists"
               fetchData={getPlaylists}
               type="playlists"
@@ -43,7 +43,7 @@ const AppRoutes = () => {
         <Route
           path="tracks"
           element={
-            <LibrarySection
+            <Overview
               title="Tracks"
               fetchData={getSavedTracks}
               type="tracks"
@@ -53,7 +53,7 @@ const AppRoutes = () => {
         <Route
           path="artists"
           element={
-            <LibrarySection
+            <Overview
               title="Artists"
               fetchData={getSavedArtists}
               type="artists"
@@ -63,7 +63,7 @@ const AppRoutes = () => {
         <Route
           path="albums"
           element={
-            <LibrarySection
+            <Overview
               title="Albums"
               fetchData={getSavedAlbums}
               type="albums"
