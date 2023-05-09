@@ -17,8 +17,7 @@ import {
   PlaylistsResponse,
   SavedTracksResponse,
 } from "../../../interfaces/Spotify";
-
-type DataType = "artists" | "playlists" | "albums" | "tracks";
+import { DataType } from "../../../types/Spotify";
 
 interface Props {
   title: string;
@@ -94,18 +93,14 @@ const Overview = ({ title, fetchData, type }: Props) => {
       case "artists":
         console.log(type, id);
         break;
-      case "playlists":
-        navigate(`/library/item/${id}`, {
-          replace: true,
-        });
-
-        console.log(type, id);
-        break;
-      case "albums":
-        console.log(type, id);
-        break;
       case "tracks":
         console.log(type, id);
+        break;
+      case "playlists":
+      case "albums":
+        navigate(`/library/view/${type}/${id}`, {
+          replace: true,
+        });
         break;
       default:
         throw new Error(`Invalid type: ${type}`);

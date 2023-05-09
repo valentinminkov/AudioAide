@@ -33,7 +33,7 @@ const AppRoutes = () => {
             />
           }
         />
-        <Route path="item/:id" element={<ItemView />} />
+        <Route path="view/:type/:id" element={<ItemView />} />
         <Route
           path="tracks"
           element={

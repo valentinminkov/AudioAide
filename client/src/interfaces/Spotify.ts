@@ -6,9 +6,7 @@ export interface UserResponse {
     filter_enabled: boolean;
     filter_locked: boolean;
   };
-  external_urls: {
-    spotify: string;
-  };
+  external_urls: TrackExternalUrls;
   followers: {
     href: string | null;
     total: number;
@@ -26,9 +24,7 @@ export interface UserResponse {
 }
 
 interface AlbumArtist {
-  external_urls: {
-    spotify: string;
-  };
+  external_urls: TrackExternalUrls;
   href: string;
   id: string;
   name: string;
@@ -47,9 +43,7 @@ interface AlbumObject {
   album_type: string;
   artists: AlbumArtist[];
   available_markets: string[];
-  external_urls: {
-    spotify: string;
-  };
+  external_urls: TrackExternalUrls;
   href: string;
   id: string;
   images: AlbumImage[];
@@ -62,9 +56,7 @@ interface AlbumObject {
 }
 
 interface TrackArtist {
-  external_urls: {
-    spotify: string;
-  };
+  external_urls: TrackExternalUrls;
   href: string;
   id: string;
   name: string;
@@ -115,6 +107,10 @@ export interface SavedTracksResponse {
   total: number;
 }
 
+interface ExternalIds {
+  upc: string;
+}
+
 export interface AlbumsResponse {
   href: string;
   items: Array<{
@@ -123,9 +119,7 @@ export interface AlbumsResponse {
       album_group: string;
       album_type: string;
       artists: Array<{
-        external_urls: {
-          spotify: string;
-        };
+        external_urls: TrackExternalUrls;
         href: string;
         id: string;
         name: string;
@@ -133,12 +127,8 @@ export interface AlbumsResponse {
         uri: string;
       }>;
       available_markets: string[];
-      external_ids: {
-        upc: string;
-      };
-      external_urls: {
-        spotify: string;
-      };
+      external_ids: ExternalIds;
+      external_urls: TrackExternalUrls;
       genres: string[];
       href: string;
       id: string;
@@ -157,9 +147,7 @@ export interface AlbumsResponse {
         href: string;
         items: Array<{
           artists: Array<{
-            external_urls: {
-              spotify: string;
-            };
+            external_urls: TrackExternalUrls;
             href: string;
             id: string;
             name: string;
@@ -170,9 +158,7 @@ export interface AlbumsResponse {
           disc_number: number;
           duration_ms: number;
           explicit: boolean;
-          external_urls: {
-            spotify: string;
-          };
+          external_urls: TrackExternalUrls;
           href: string;
           id: string;
           is_local: boolean;
@@ -204,9 +190,7 @@ export interface PlaylistsResponse {
   items: {
     collaborative: boolean;
     description: string;
-    external_urls: {
-      spotify: string;
-    };
+    external_urls: TrackExternalUrls;
     href: string;
     id: string;
     images: {
@@ -217,9 +201,7 @@ export interface PlaylistsResponse {
     name: string;
     owner: {
       display_name: string;
-      external_urls: {
-        spotify: string;
-      };
+      external_urls: TrackExternalUrls;
       href: string;
       id: string;
       type: string;
@@ -254,9 +236,7 @@ export interface Image {
 
 export interface FollowedArtistsResponseObject {
   items: Array<{
-    external_urls: {
-      spotify: string;
-    };
+    external_urls: TrackExternalUrls;
     followers: {
       href: null;
       total: number;
@@ -282,9 +262,7 @@ export interface FollowedArtistsResponseObject {
 export interface PlaylistResponse {
   collaborative: boolean;
   description: string;
-  external_urls: {
-    spotify: string;
-  };
+  external_urls: TrackExternalUrls;
   followers: {
     href: string | null;
     total: number;
@@ -295,9 +273,7 @@ export interface PlaylistResponse {
   name: string;
   owner: {
     display_name: string;
-    external_urls: {
-      spotify: string;
-    };
+    external_urls: TrackExternalUrls;
     href: string;
     id: string;
     type: string;
@@ -315,6 +291,43 @@ export interface PlaylistResponse {
     previous: string | null;
     total: number;
   };
+  type: string;
+  uri: string;
+}
+
+interface Copyright {
+  text: string;
+  type: string;
+}
+
+interface AlbumTracks {
+  href: string;
+  items: Track[];
+  limit: number;
+  next: null;
+  offset: number;
+  previous: null;
+  total: number;
+}
+
+export interface AlbumResponse {
+  album_group: string;
+  album_type: string;
+  artists: AlbumArtist[];
+  copyrights: Copyright[];
+  external_ids: ExternalIds;
+  external_urls: TrackExternalUrls;
+  genres: string[];
+  href: string;
+  id: string;
+  images: Image[];
+  label: string;
+  name: string;
+  popularity: number;
+  release_date: string;
+  release_date_precision: string;
+  total_tracks: number;
+  tracks: AlbumTracks;
   type: string;
   uri: string;
 }

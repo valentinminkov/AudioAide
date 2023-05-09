@@ -103,6 +103,17 @@ export const getSavedAlbums = async (
   }
 };
 
+export const getAlbum = async (albumId: string, userId: string) => {
+  try {
+    const response = await apiClient.get(
+      `spotify/user/${userId}/album/${albumId}`
+    );
+    return response.data as PlaylistResponse;
+  } catch (error) {
+    console.log(error, "Error fetching playlists");
+  }
+};
+
 export const getSavedArtists = async (
   userId: string,
   limit = 20,

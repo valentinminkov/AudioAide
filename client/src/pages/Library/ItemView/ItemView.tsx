@@ -1,34 +1,49 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import style from "./ItemView.module.scss";
-import { getPlaylist } from "../../../services/Spotify";
+import { getPlaylist, getAlbum } from "../../../services/Spotify";
 import { PlaylistResponse } from "../../../interfaces/Spotify";
 import { AppContext } from "../../../context/AppContext";
 import Spinner from "../../../components/Spinner/Spinner";
 import List from "../../../components/List/List";
 import DescriptionCard from "../../../components/DescriptionCard/DescriptionCard";
+import { DataType } from "../../../types/Spotify";
 
 interface Props {}
 
 const Playlist: React.FC<Props> = ({}) => {
   const { appState: { user } = { user: undefined } } =
     useContext(AppContext) || {};
-  const { id } = useParams();
+  const params = useParams();
+  const { id, type } = params as { id: string; type: DataType };
   const [playlist, setPlaylist] = useState<PlaylistResponse | null>(null);
 
   useEffect(() => {
     const getPlaylistData = async () => {
       if (!user || !id) return;
 
-      try {
-        const playlistData = await getPlaylist(id, user.id);
-        if (!playlistData) return;
-        setPlaylist(playlistData);
-      } catch (error) {}
+      switch (type) {
+        case "playlists":
+          try {
+            const playlistData = await getPlaylist(id, user.id);
+            if (!playlistData) return;
+            setPlaylist(playlistData);
+          } catch (error) {}
+          break;
+        case "albums":
+          try {
+            const albumData = await getAlbum(id, user.id);
+            if (!albumData) return;
+            // TO DO
+          } catch (error) {}
+          break;
+        default:
+          break;
+      }
     };
 
     getPlaylistData();
-  }, [id, user]);
+  }, [id, type, user]);
 
   const columnHeaders = ["Title", "Artist", ""];
   const listColumns = playlist?.tracks.items.map((item) => [

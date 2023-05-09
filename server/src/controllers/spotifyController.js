@@ -160,4 +160,11 @@ spotifyController.getSavedAlbums = async (req, res) => {
   } catch (error) {}
 };
 
+spotifyController.getAlbum = async (req, res) => {
+  try {
+    const data = await req.spotifyApi.getAlbum(req.params.id);
+    res.json(data.body);
+  } catch (error) {}
+};
+
 module.exports = spotifyController;
