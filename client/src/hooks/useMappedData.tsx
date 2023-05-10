@@ -7,17 +7,8 @@ import {
   PlaylistResponse,
   AlbumResponse,
 } from "../interfaces/Spotify";
-import { UniversalItem } from "../interfaces/Data";
+import { UniversalOverviewItem, UniversalListItem } from "../interfaces/Data";
 import { DescriptionRow } from "../components/DescriptionCard/DescriptionCard";
-import { Image } from "../interfaces/Spotify";
-
-interface Item {
-  title: string;
-  image: Image;
-  descriptionRows: DescriptionRow[];
-  listColumnHeaders: string[];
-  listColumns: any[][];
-}
 
 type DataType = "artists" | "playlists" | "albums" | "tracks";
 
@@ -85,7 +76,7 @@ const useMappedData = (
     | SavedTracksResponse
     | null,
   type: DataType
-): { items: UniversalItem[]; total: number } => {
+): { items: UniversalOverviewItem[]; total: number } => {
   return useMemo(() => {
     if (!data) return { items: [], total: 0 };
     switch (type) {
@@ -95,7 +86,10 @@ const useMappedData = (
           items:
             artistsData?.artists?.items?.map((item) => ({
               id: item?.id || "",
-              name: item?.name || "",
+              title: item?.name || "",
+              subTitle: item?.followers?.total
+                ? `${item.followers.total.toString()} followers`
+                : "",
               images: item?.images || [],
             })) || [],
           total: artistsData?.artists?.total || 0,
@@ -106,7 +100,10 @@ const useMappedData = (
           items:
             playlistsData?.items?.map((item) => ({
               id: item?.id || "",
-              name: item?.name || "",
+              title: item?.name || "",
+              subTitle: item?.owner?.display_name
+                ? `by ${item.owner.display_name}`
+                : "",
               images: item?.images || [],
             })) || [],
           total: playlistsData?.total || 0,
@@ -117,7 +114,10 @@ const useMappedData = (
           items:
             albumsData?.items?.map((item) => ({
               id: item?.album?.id || "",
-              name: item?.album?.name || "",
+              title: item?.album?.name || "",
+              subTitle: item?.album?.artists
+                .map((artist) => artist.name)
+                .join(", "),
               images: item?.album?.images || [],
             })) || [],
           total: albumsData?.total || 0,
@@ -128,7 +128,10 @@ const useMappedData = (
           items:
             tracksData?.items?.map((item) => ({
               id: item?.track?.id || "",
-              name: item?.track?.name || "",
+              title: item?.track?.name || "",
+              subTitle: item?.track?.artists
+                .map((artist) => artist?.name)
+                .join(", "),
               images: item?.track?.album?.images || [],
             })) || [],
           total: tracksData?.total || 0,
@@ -142,12 +145,12 @@ const useMappedData = (
 const useMapResponseToItem = (
   response: PlaylistResponse | AlbumResponse | undefined,
   type: DataType
-): Item | undefined => {
+): UniversalListItem | undefined => {
   if (!response) return;
   const listColumns = mapTrackItems(response, type);
   const descriptionRows = mapDescriptionRows(response, type);
 
-  const item: Item = {
+  const item: UniversalListItem = {
     title: response.name,
     image: response.images[0],
     descriptionRows: descriptionRows,

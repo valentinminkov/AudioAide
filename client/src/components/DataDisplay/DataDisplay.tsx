@@ -1,16 +1,15 @@
 import React from "react";
-import { UniversalItem } from "../../interfaces/Data";
+import { UniversalOverviewItem } from "../../interfaces/Data";
 import Data from "../Data/Data";
 import Pagination from "../Pagination/Pagination";
 import StickyContainer from "../StickyContainer/StickyContainer";
 import styles from "./DataDisplay.module.scss";
-import { useNavigate, useLocation } from "react-router-dom";
 
 type DataType = "artists" | "playlists" | "albums" | "tracks";
 
 interface DataDisplayProps {
   currentPage: number;
-  items: UniversalItem[];
+  items: UniversalOverviewItem[];
   total: number;
   type: DataType;
   offset: number;
@@ -43,12 +42,13 @@ const DataDisplay: React.FC<DataDisplayProps> = ({
         {items
           ?.filter((item) => item.id) // Filter out items without an id
           .map((item) => {
-            const { id, name, images } = item;
+            const { id, title, subTitle, images } = item;
             return (
               <Data
                 key={id}
                 id={id}
-                title={name}
+                title={title}
+                subTitle={subTitle}
                 images={images}
                 onClick={onContainerClick}
               />
