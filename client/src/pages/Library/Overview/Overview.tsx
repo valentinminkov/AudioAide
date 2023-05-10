@@ -10,7 +10,7 @@ import DataDisplay from "../../../components/DataDisplay/DataDisplay";
 import { AppContext } from "../../../context/AppContext";
 import style from "./Overview.module.scss";
 import Spinner from "../../../components/Spinner/Spinner";
-import useMappedData from "../../../hooks/useMappedData";
+import { useMappedData } from "../../../hooks/useMappedData";
 import {
   AlbumsResponse,
   FollowedArtistsResponse,

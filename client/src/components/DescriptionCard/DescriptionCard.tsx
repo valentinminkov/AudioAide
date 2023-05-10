@@ -3,7 +3,7 @@ import style from "./DescriptionCard.module.scss";
 import { Image } from "../../interfaces/Spotify";
 import { v4 as uuidv4 } from "uuid";
 
-interface DescriptionRow {
+export interface DescriptionRow {
   title?: string;
   content: string | JSX.Element;
 }

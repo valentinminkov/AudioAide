@@ -7,6 +7,7 @@ import {
   UserResponse,
   PlaylistsResponse,
   PlaylistResponse,
+  AlbumResponse,
 } from "../interfaces/Spotify";
 
 const apiClient = axios.create({
@@ -108,7 +109,7 @@ export const getAlbum = async (albumId: string, userId: string) => {
     const response = await apiClient.get(
       `spotify/user/${userId}/album/${albumId}`
     );
-    return response.data as PlaylistResponse;
+    return response.data as AlbumResponse;
   } catch (error) {
     console.log(error, "Error fetching playlists");
   }
